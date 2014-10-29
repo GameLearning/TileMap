@@ -27,65 +27,83 @@ bool HelloWorld::init()
         return false;
     }
     
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    _visibleSize = Director::getInstance()->getVisibleSize();
+    _tileMap = TMXTiledMap::create("TileMap.tmx");
+    _background = _tileMap->layerNamed("Background");
+ 
+    this->addChild(_tileMap);
     
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
+    TMXObjectGroup *objectGroup = _tileMap->objectGroupNamed("Objects");
+    if(objectGroup == NULL){
+        CCLog("tile map has no objects object layer");
+        return false;
+    }
     
-    auto label = LabelTTF::create("Hello World", "Arial", 24);
+    auto spawnPoint = objectGroup->getObject("SpawnPoint");
     
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+    int x = ((String)spawnPoint.at("x").asString()).intValue();
+    int y = ((String)spawnPoint.at("y").asString()).intValue();
+    
+    _player = Sprite::create("Player.png");
+    _player->setPosition(Vec2(x,y));
+    this->addChild(_player);
+    this->setViewPointCenter(_player->getPosition());
+    
+    
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
+    listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
 
+void HelloWorld::setViewPointCenter(Vec2 position){
+    int x = MAX(position.x, _visibleSize.width/2);
+    int y = MAX(position.y, _visibleSize.height/2);
+    
+    x = MIN(x, (_tileMap->getMapSize().width * this->_tileMap->getTileSize().width) - _visibleSize.width / 2);
+    y = MIN(y, (_tileMap->getMapSize().height * _tileMap->getTileSize().height) - _visibleSize.height/2);
+    Vec2 actualPosition = Vec2(x, y);
+    
+    Vec2 centerOfView = Vec2(_visibleSize.width/2, _visibleSize.height/2);
+    Vec2 viewPoint = centerOfView - actualPosition;
+    this->setPosition(viewPoint);
+}
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
+bool HelloWorld::onTouchBegan(Touch *touch, Event * event){
 
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+}
+void HelloWorld::onTouchEnded(Touch *touch, Event * event){
+    Vec2 touchLocation = touch->getLocation();
+    touchLocation = this->convertToNodeSpace(touchLocation);
+    
+    Vec2 playerPos = _player->getPosition();
+    Vec2 diff = touchLocation -  playerPos;
+    
+    if ( abs(diff.x) > abs(diff.y) ) {
+        if (diff.x > 0) {
+            playerPos.x += _tileMap->getTileSize().width;
+        } else {
+            playerPos.x -= _tileMap->getTileSize().width;
+        }
+    } else {
+        if (diff.y > 0) {
+            playerPos.y += _tileMap->getTileSize().height;
+        } else {
+            playerPos.y -= _tileMap->getTileSize().height;
+        }
+    }
+    
+    // safety check on the bounds of the map
+    if (playerPos.x <= (_tileMap->getMapSize().width * _tileMap->getTileSize().width) &&
+        playerPos.y <= (_tileMap->getMapSize().height * _tileMap->getTileSize().height) &&
+        playerPos.y >= 0 &&
+        playerPos.x >= 0 )
+    {
+        //this->setPlayerPosition(playerPos);
+        _player->setPosition(playerPos);
+    }
+ 
+    this->setViewPointCenter(_player->getPosition());
 }
