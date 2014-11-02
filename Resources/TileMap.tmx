@@ -10,18 +10,28 @@
     <property name="Collidable" value="True"/>
    </properties>
   </tile>
+  <tile id="1">
+   <properties>
+    <property name="Collectable" value="True"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Background" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztmulOwzAMgAuIbVBgHBOnNJg4VBhHH2mPxqPwaDhSKllR09iu0wTWH5+qtonjb7GrVtqyKIolUNvjDXAbgTtnHW1M3Aqdr4An4E2RZ+ARrVFF8nlBcVfOmhrgmLVdb4j9YHhsLGSPcT/4+/Fe0HoW0/V8+BhoP5Yo7msR7ts1MAGmlhlh3tpZJzbmt7rvOJoxn8AJMLec2utd8yri+lKmQo6RxxFxzoyY00Qwb/4HaPZ7GzyuBuSakI/hEthnevh6XRtuDm3PEQm1IpL1tTxSI/V4IDBkHKmHeef5ChyHjLPtdZUbo0dejB55MXrkxeiRF6NHXnA9doDdDNlj5GjGHgCHGVIij1COJRqzAM4TgvMy5xfI48wzB3L+dj2wfyoaD+p4yPmny8Pdt7brnLEh/rtHaHzIIxRXoyYo8WN5aNY2x8N33ubRt145NSj1ovRHn3rl9pJ0v3Lz8M3h7g+1PzT6heOh0R/aHn16qo8Ht1b61n4sj1LZg9JLqerKV/+cXpDMycFDq5die0jvx/KAd/lNif4rUtpzH01M6X0JbsxFx/NKUt+pMR7ut1bjkfLbkIv5dvwFtdQI0w==
+   eJztmmtOwzAMgAuIbVBgPCaeUsUEQ4Xx6JF2NI7C0XCkVLKipbFdpwmjPz5VWRPHn2JXrbSqKIoKaOz1DriPwIOzjzYmbo3GS+AZeFNkBTyhPepIPi8o7tLZUwMcs7H7DXEeDI+Nhewxngf/PN4LWs9iup4PHwOdR4Xivhbhvl0DE2BqmRHWrZ19YlMHroZP4AyYW86Z62MwFXKKPE6Ia2bEnCaCdfM/AD7vXfe4GZBbQj6Ga+CQ6eHrdW24OfieI1waRST7a3mkRurxSGDIOFIP887zFbgOGee/11VujB55MXrkxeiRF6NHXoweecH12AP2M+SAkaOZewQcZ0iJPEI5lmjOArhMCM7LjK+Qx4VnDeT87Xpg/1S0HtT5kPNPl4d7btt+58wNseseofkhj1BcjZqgxI/loVnbHA/feJtH33rl1KDUi9IffeqV20vS88rNw7eGez7U/tDoF46HRn9oe/TpqT4e3FrpW/uxPEplD0ovpaorX/1zekGyJgcPrV6K7SG9H8sD3uU3JfqvSGnHPtqY0vsS3JiLjueVpL5TYzzcb63WI+W3IRfz7fgLquUIyw==
   </data>
  </layer>
  <objectgroup name="Objects" width="50" height="50">
   <object name="SpawnPoint" x="80" y="299"/>
  </objectgroup>
+ <layer name="Foreground" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2CEOACAIAEB+wv9/aTYZcIPpXSEwxggQiICIHNSrmn/BDzOyy0O8XQcAAAAAQJ1fLMBs7jT0soN0WfRgAfE=
+  </data>
+ </layer>
  <layer name="Meta" width="50" height="50">
   <data encoding="base64" compression="zlib">
-   eJztmFkOgCAMRL2S97+cH/4QwtIpHbbMS4wx0mWgJejz/LzJnXWlcaJJY8zQUYrJ0MKIwfZf8svWwYqR+71tPay1jtjVYkaC7lcl+5X7VSmf1n1mLkIIHswzyWxu0HAyUfO6en1u0SGEEEIIIWJgfDNFf7ecfPZE/jOhmndcD1TzDNAa6emwzAsyFp3323RYxrd09PyW8Owbq3QgOXlsPM81n956RWoQ9dEab3nnqfncz2gfozpG+g7VUbPp6bDWVQ9PnaF9G9Ef1tyiYPd5b75G94SRvGfrsPTSqrrKx6OavTY76IiEqcP73gPSH/nz7ldNb0vrKZys4wNdGHpQ
+   eJztmlsOxSAIRLul6/4X14/7YwwKQ8FX5iTGWB8wFkyb9nn+/Ko6q9R2oqltzNAh2czQkmFDWr8k2mjbmi1rP++Hz0bdtsY6Mq9nMxL0vJLmrzyvJH/KoB75UpSaELIPmc8ks7lBw8lE7evq+3OLDkIIIYQQEkPGO1P0e8vJz56tDmTsbsXiG6p5BmiMaDos+4KMRff9Nh2W8T0dpblm3S/PuZGpw+tbpo5Ru7emN16RGETXGI239Hlivl3nax6jOr7kHaqjN0fTYY0rDU+coXkbkR9W36LIznNtv+rS+7Z8mg7NJppTM+KqHY9q9s7ZQUckmTq8/Qij/zs0u0hcrCwSmtZTOFnHC/rdfXA=
   </data>
  </layer>
 </map>

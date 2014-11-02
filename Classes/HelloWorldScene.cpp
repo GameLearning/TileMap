@@ -30,6 +30,7 @@ bool HelloWorld::init()
     _visibleSize = Director::getInstance()->getVisibleSize();
     _tileMap = TMXTiledMap::create("TileMap.tmx");
     _background = _tileMap->layerNamed("Background");
+    _foreground = _tileMap->layerNamed("Foreground");
     _meta = _tileMap->layerNamed("Meta");
     _meta->setVisible(false);
     this->addChild(_tileMap);
@@ -113,15 +114,15 @@ void HelloWorld::setPlayerPosition(Vec2 position){
     int tileGid = _meta->getTileGIDAt(tileCoord);
     
     if(tileGid){
-        CCLOG("1");
         auto properties = _tileMap->getPropertiesForGID(tileGid);
-        
-        CCLOG("2");
         if(!properties.isNull()){
-            CCLOG("3");
-            if(properties.asValueMap().at("Collidable").asString().compare("True") == 0){
-                CCLOG("4");
+            ValueMap valueMap = properties.asValueMap();
+            if(isProp(valueMap,"Collidable")){
                 return;
+            }
+            if(isProp(valueMap,"Collectable")){
+                _meta->removeTileAt(tileCoord);
+                _foreground->removeTileAt(tileCoord);
             }
         }
     }
@@ -133,4 +134,8 @@ Vec2 HelloWorld::tileCoordForPosition(Vec2 position)
     int x = position.x / _tileMap->getTileSize().width;
     int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
     return Vec2(x, y);
+}
+
+bool HelloWorld::isProp(ValueMap valueMap, std::string string){
+    return (valueMap.find(string) != valueMap.end() && valueMap.at(string).asString().compare("True") == 0);
 }

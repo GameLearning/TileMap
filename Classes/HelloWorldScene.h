@@ -19,10 +19,12 @@ private:
     void setViewPointCenter(Vec2 position);
     Vec2 tileCoordForPosition(Vec2 position);
     void setPlayerPosition(Vec2 position);
+    bool isProp(ValueMap valueMap, std::string string);
     
     TMXTiledMap *_tileMap;
     TMXLayer *_background;
     TMXLayer *_meta;
+    TMXLayer *_foreground;
     Sprite *_player;
     
     Size _visibleSize;
