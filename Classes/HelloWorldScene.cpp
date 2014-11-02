@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-
+#include "SimpleAudioEngine.h"
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -12,7 +12,9 @@ Scene* HelloWorld::createScene()
 
     // add layer as a child to scene
     scene->addChild(layer);
-
+    HudLayer *hud = HudLayer::create();
+    scene->addChild(hud);
+    layer->_hud = hud;
     // return the scene
     return scene;
 }
@@ -26,7 +28,11 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("pickup.caf");
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("hit.caf");
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("move.caf");
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("TileMap.caf");
+
     _visibleSize = Director::getInstance()->getVisibleSize();
     _tileMap = TMXTiledMap::create("TileMap.tmx");
     _background = _tileMap->layerNamed("Background");
@@ -118,14 +124,18 @@ void HelloWorld::setPlayerPosition(Vec2 position){
         if(!properties.isNull()){
             ValueMap valueMap = properties.asValueMap();
             if(isProp(valueMap,"Collidable")){
+                CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.caf");
                 return;
             }
             if(isProp(valueMap,"Collectable")){
+                CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("pickup.caf");
                 _meta->removeTileAt(tileCoord);
                 _foreground->removeTileAt(tileCoord);
+                _hud->numCollectedChanged(++_numCollected);
             }
         }
     }
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("move.caf");
     _player->setPosition(position);
 }
 

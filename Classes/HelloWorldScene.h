@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "HudLayer.h"
 USING_NS_CC;
 class HelloWorld : public cocos2d::Layer
 {
@@ -29,5 +30,6 @@ private:
     
     Size _visibleSize;
     
-    //void setPlayerPosition(CCPoint position);
+    HudLayer *_hud;
+    int _numCollected;
 };
