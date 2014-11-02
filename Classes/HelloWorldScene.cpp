@@ -30,7 +30,8 @@ bool HelloWorld::init()
     _visibleSize = Director::getInstance()->getVisibleSize();
     _tileMap = TMXTiledMap::create("TileMap.tmx");
     _background = _tileMap->layerNamed("Background");
- 
+    _meta = _tileMap->layerNamed("Meta");
+    _meta->setVisible(false);
     this->addChild(_tileMap);
     
     TMXObjectGroup *objectGroup = _tileMap->objectGroupNamed("Objects");
@@ -72,7 +73,7 @@ void HelloWorld::setViewPointCenter(Vec2 position){
 }
 
 bool HelloWorld::onTouchBegan(Touch *touch, Event * event){
-
+    return true;
 }
 void HelloWorld::onTouchEnded(Touch *touch, Event * event){
     Vec2 touchLocation = touch->getLocation();
@@ -101,9 +102,35 @@ void HelloWorld::onTouchEnded(Touch *touch, Event * event){
         playerPos.y >= 0 &&
         playerPos.x >= 0 )
     {
-        //this->setPlayerPosition(playerPos);
-        _player->setPosition(playerPos);
+        this->setPlayerPosition(playerPos);
     }
  
     this->setViewPointCenter(_player->getPosition());
+}
+
+void HelloWorld::setPlayerPosition(Vec2 position){
+    Vec2 tileCoord = tileCoordForPosition(position);
+    int tileGid = _meta->getTileGIDAt(tileCoord);
+    
+    if(tileGid){
+        CCLOG("1");
+        auto properties = _tileMap->getPropertiesForGID(tileGid);
+        
+        CCLOG("2");
+        if(!properties.isNull()){
+            CCLOG("3");
+            if(properties.asValueMap().at("Collidable").asString().compare("True") == 0){
+                CCLOG("4");
+                return;
+            }
+        }
+    }
+    _player->setPosition(position);
+}
+
+Vec2 HelloWorld::tileCoordForPosition(Vec2 position)
+{
+    int x = position.x / _tileMap->getTileSize().width;
+    int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+    return Vec2(x, y);
 }

@@ -17,9 +17,12 @@ public:
     
 private:
     void setViewPointCenter(Vec2 position);
+    Vec2 tileCoordForPosition(Vec2 position);
+    void setPlayerPosition(Vec2 position);
     
     TMXTiledMap *_tileMap;
     TMXLayer *_background;
+    TMXLayer *_meta;
     Sprite *_player;
     
     Size _visibleSize;
